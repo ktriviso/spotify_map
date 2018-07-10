@@ -18,18 +18,19 @@ class App extends Component {
   callApi = async () => {
     const response = await fetch('/api/hello');
     const body = await response.json();
-
     if (response.status !== 200) throw Error(body.message);
-
     return body;
   };
 
-  callLoginApi = (e) => {
+  callLoginApi = async (e) => {
     e.preventDefault()
     const response = await fetch('/api/spotify-login')
     .then((response) => {
-      console.log(response)
-      return response
+      return response.json()
+    })
+    .then((data) => {
+      console.log(data)
+      window.location = data.url
     })
   }
 
