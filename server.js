@@ -18,13 +18,14 @@ const spotifyApi = new spotifyWebApi({ ...config })
 // }).listen(8888);
 
 app.get('/api/spotify-login', (req, res) => {
-  // console.log(req)
   const state = 'spotify'
   const dialogue = { show_dialogue : true }
-  console.log(config.scopes)
-  console.log(config)
   const url = spotifyApi.createAuthorizeURL(config.scopes, state, dialogue)
   res.send({url:url})
+})
+
+app.post('/api/auth-code', (req, res) => {
+  console.log(req.body)
 })
 
 app.get('/api/hello', (req, res) => {

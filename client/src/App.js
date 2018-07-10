@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { BrowserRouter, Route, Link, Switch } from 'react-router-dom'
 
 import logo from './logo.svg';
 
@@ -37,11 +38,48 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <button onClick={this.callLoginApi}>Log In</button>
-        <p className="App-intro">{this.state.response}</p>
+        <Switch>
+          <Route exact path='/spotify-callback/' component={Auth} />
+          <Route exact path='/' render={(props) => <LogIn {...props} callLoginApi={this.callLoginApi}/>} />
+        </Switch>
       </div>
     );
   }
 }
 
 export default App;
+
+const LogIn = (props) => <button onClick={props.callLoginApi}>Log In</button>
+class Auth extends Component {
+  constructor(props){
+    super(props)
+  }
+
+  componentDidMount(){
+    console.log(this.props)
+    const auth_code = this.props.location.search.split('=')[1].replace('&state', '')
+    console.log(auth_code)
+    this.sendAuth(auth_code)
+  }
+
+  sendAuth = (auth_code) => fetch('/api/auth-code', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+              'auth_code': auth_code
+          })
+      })
+      .then(res => {
+        console.log(res)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+
+  render(){
+    return (
+      <div>auth</div>
+    )
+
+  }
+}
