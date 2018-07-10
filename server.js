@@ -27,6 +27,21 @@ app.get('/api/spotify-login', (req, res) => {
 app.post('/api/auth-code', (req, res) => {
   const auth_code = req.headers.referer.split('=')[1].replace('&state', '')
   console.log(auth_code)
+
+  spotifyApi.authorizationCodeGrant(auth_code).then(
+  function(data) {
+    console.log('The token expires in ' + data.body['expires_in']);
+    console.log('The access token is ' + data.body['access_token']);
+    console.log('The refresh token is ' + data.body['refresh_token']);
+// Set the access token on the API object to use it in later calls
+    spotifyApi.setAccessToken(data.body['access_token']);
+    spotifyApi.setRefreshToken(data.body['refresh_token']);
+  },
+  function(err) {
+    console.log('Something went wrong!', err);
+  }
+);
+
 })
 
 app.get('/api/hello', (req, res) => {
