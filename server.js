@@ -25,7 +25,8 @@ app.get('/api/spotify-login', (req, res) => {
 })
 
 app.post('/api/auth-code', (req, res) => {
-  console.log(req.body)
+  const auth_code = req.headers.referer.split('=')[1].replace('&state', '')
+  console.log(auth_code)
 })
 
 app.get('/api/hello', (req, res) => {

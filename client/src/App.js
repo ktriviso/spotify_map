@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Route, Link, Switch } from 'react-router-dom'
+import Map from './Map'
 
 import logo from './logo.svg';
 
@@ -39,6 +40,7 @@ class App extends Component {
     return (
       <div className="App">
         <Switch>
+          <Route exact path='/map/' component={Map} />
           <Route exact path='/spotify-callback/' component={Auth} />
           <Route exact path='/' render={(props) => <LogIn {...props} callLoginApi={this.callLoginApi}/>} />
         </Switch>
@@ -56,9 +58,7 @@ class Auth extends Component {
   }
 
   componentDidMount(){
-    console.log(this.props)
     const auth_code = this.props.location.search.split('=')[1].replace('&state', '')
-    console.log(auth_code)
     this.sendAuth(auth_code)
   }
 
